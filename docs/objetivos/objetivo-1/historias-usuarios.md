@@ -19,7 +19,7 @@ Cadena causal: avistamientos recientes del depredador en la zona → menor proba
 Limitación importante: la ausencia de avistamientos no garantiza la ausencia del depredador. Solo significa que nadie lo ha reportado.
 
 ### Ejemplo concreto
-Antonio quiere pescar cangrejos en un tramo de río cerca de Toledo. Consulta la zona y hay 3 avistamientos de visón americano en los últimos 15 días. La zona se considera con depredador presente y Antonio decide cambiar de ubicación. En un segundo tramo no hay avistamientos recientes y lo elige como alternativa.
+Antonio quiere pescar cangrejos en un tramo de río cerca de Toledo. Consulta la zona y hay 3 avistamientos de visón americano en los últimos 15 días. La zona se considera con depredador presente y Antonio decide cambiar de ubicación. En un segundo tramo no hay registros recientes del visón y lo elige como alternativa, sabiendo que eso indica falta de reportes, no ausencia confirmada del depredador.
 
 ### Datos: de dónde se obtienen
 - iNaturalist (API de observaciones): https://api.inaturalist.org/v1/docs/
@@ -34,7 +34,8 @@ Ejemplo equivalente en GBIF:
 https://api.gbif.org/v1/occurrence/search?scientificName=Neogale%20vison&country=ES&hasCoordinate=true&limit=5
 
 ### Criterio de aceptación (ejemplo)
-Dada una zona y una especie depredadora, cuando se consultan los avistamientos de los últimos 15 días, entonces se indica si hay avistamientos y cuántos.
+Dada una zona y una especie depredadora, cuando se consultan los avistamientos de los últimos 15 días, entonces se indica el número de avistamientos y el estado de presencia: "presencia detectada" si hay al menos uno, o "sin registros recientes" si no hay ninguno.
+En este último caso, la zona no se presenta como libre del depredador, sino como una zona de la que no hay reportes recientes.
 
 
 ## [HU002] No sé cómo se está expandiendo una especie invasora a lo largo del tiempo
