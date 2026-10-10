@@ -19,6 +19,10 @@ pub enum ErrorDominio {
     NombreCientificoInvalido,
     /// Nombre científico vigente repetido en la lista de nombres anteriores.
     NombreCientificoDuplicado,
+    /// Avistamiento con el identificador original vacío.
+    AvistamientoIncompleto,
+    /// URL de foto vacía, con espacios o que no empieza por `http://` o `https://`.
+    UrlFotoInvalida,
 }
 
 impl fmt::Display for ErrorDominio {
@@ -30,6 +34,8 @@ impl fmt::Display for ErrorDominio {
             Self::NombreCientificoDuplicado => {
                 "el nombre científico vigente está repetido entre los anteriores"
             }
+            Self::AvistamientoIncompleto => "el avistamiento necesita su identificador original",
+            Self::UrlFotoInvalida => "URL de foto inválida",
         };
         f.write_str(mensaje)
     }
