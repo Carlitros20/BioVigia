@@ -34,7 +34,7 @@ Ejemplo equivalente en GBIF:
 https://api.gbif.org/v1/occurrence/search?scientificName=Neogale%20vison&country=ES&hasCoordinate=true&limit=5
 
 ### Criterio de aceptación (ejemplo)
-Dada una zona y una especie depredadora, cuando se consultan los avistamientos de los últimos 15 días, entonces se indica el número de avistamientos y el estado de presencia: "presencia detectada" si hay al menos uno, o "sin registros recientes" si no hay ninguno.
+Dada una zona y una especie, cuando se consultan los avistamientos de los últimos 15 días, entonces se indica el número de avistamientos y el estado de presencia: "presencia detectada" si hay al menos uno, o "sin registros recientes" si no hay ninguno.
 En este último caso, la zona no se presenta como libre del depredador, sino como una zona de la que no hay reportes recientes.
 
 
