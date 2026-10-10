@@ -14,6 +14,18 @@ pub enum Fuente {
     Gbif,
 }
 
+/// Grado de calidad que iNaturalist asigna a una observación (campo
+/// `quality_grade` de su API). GBIF no lo proporciona.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum GradoCalidad {
+    /// `research`: identificación confirmada por la comunidad.
+    Investigacion,
+    /// `needs_id`: pendiente de confirmar la identificación.
+    NecesitaIdentificacion,
+    /// `casual`: sin datos suficientes para confirmarla.
+    Casual,
+}
+
 /// Fotos de un avistamiento, que permiten comprobar que la especie está bien
 /// identificada.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -46,7 +58,7 @@ impl EvidenciaFotografica {
     }
 }
 
-/// Validación mínima sin dependencias; la completa queda para el objetivo 3.
+/// Validación mínima sin dependencias, hasta que haya gestor de dependencias.
 fn es_url_valida(url: &str) -> bool {
     let con_esquema = url
         .strip_prefix("https://")
@@ -63,7 +75,7 @@ pub struct Avistamiento {
     especie: EspecieId,
     fecha: SystemTime,
     coordenada: Coordenada,
-    calidad: Option<String>,
+    calidad: Option<GradoCalidad>,
     evidencia: EvidenciaFotografica,
 }
 
@@ -75,10 +87,13 @@ impl Avistamiento {
         especie: EspecieId,
         fecha: SystemTime,
         coordenada: Coordenada,
-        calidad: Option<String>,
+        calidad: Option<GradoCalidad>,
         evidencia: EvidenciaFotografica,
     ) -> Result<Self, ErrorDominio> {
-        if id_original.trim().is_empty() {
+        // Se guarda recortado: forma parte de la identidad, y "123" y "123 "
+        // deben ser el mismo avistamiento.
+        let id_original = id_original.trim().to_owned();
+        if id_original.is_empty() {
             return Err(ErrorDominio::AvistamientoIncompleto);
         }
         Ok(Self {
@@ -112,8 +127,8 @@ impl Avistamiento {
         self.coordenada
     }
 
-    pub fn calidad(&self) -> Option<&str> {
-        self.calidad.as_deref()
+    pub fn calidad(&self) -> Option<GradoCalidad> {
+        self.calidad
     }
 
     pub fn evidencia(&self) -> &EvidenciaFotografica {
