@@ -24,10 +24,10 @@ pub struct NombreCientifico(String);
 impl NombreCientifico {
     /// El género empieza por mayúscula y el resto de palabras van en minúscula.
     pub fn new(nombre: &str) -> Result<Self, ErrorDominio> {
+        // `split` siempre devuelve al menos un elemento (vacío si el nombre lo
+        // está), así que `palabras[0]` existe siempre.
         let palabras: Vec<&str> = nombre.split(' ').collect();
-        let Some((genero, resto)) = palabras.split_first() else {
-            return Err(ErrorDominio::NombreCientificoInvalido);
-        };
+        let (genero, resto) = (palabras[0], &palabras[1..]);
         let genero_valido = genero
             .chars()
             .next()
