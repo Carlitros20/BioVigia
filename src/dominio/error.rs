@@ -23,6 +23,10 @@ pub enum ErrorDominio {
     AvistamientoIncompleto,
     /// URL de foto vacía, con espacios o que no empieza por `http://` o `https://`.
     UrlFotoInvalida,
+    /// Depredación en la que depredador y presa son la misma especie.
+    DepredacionSobreMismaEspecie,
+    /// Depredación sin ninguna fase vital afectada.
+    FaseVitalRequerida,
 }
 
 impl fmt::Display for ErrorDominio {
@@ -36,6 +40,10 @@ impl fmt::Display for ErrorDominio {
             }
             Self::AvistamientoIncompleto => "el avistamiento necesita su identificador original",
             Self::UrlFotoInvalida => "URL de foto inválida",
+            Self::DepredacionSobreMismaEspecie => {
+                "el depredador y la presa no pueden ser la misma especie"
+            }
+            Self::FaseVitalRequerida => "la depredación debe afectar al menos a una fase vital",
         };
         f.write_str(mensaje)
     }
