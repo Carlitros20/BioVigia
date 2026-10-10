@@ -15,6 +15,10 @@ pub enum ErrorDominio {
     CoordenadaInvalida,
     /// Tramo de río con el nombre/código vacío.
     CodigoTramoRequerido,
+    /// Nombre científico vacío o que no sigue la nomenclatura binomial.
+    NombreCientificoInvalido,
+    /// Nombre científico vigente repetido en la lista de nombres anteriores.
+    NombreCientificoDuplicado,
 }
 
 impl fmt::Display for ErrorDominio {
@@ -22,6 +26,10 @@ impl fmt::Display for ErrorDominio {
         let mensaje = match self {
             Self::CoordenadaInvalida => "coordenada inválida",
             Self::CodigoTramoRequerido => "el tramo de río necesita un nombre o código",
+            Self::NombreCientificoInvalido => "nombre científico inválido",
+            Self::NombreCientificoDuplicado => {
+                "el nombre científico vigente está repetido entre los anteriores"
+            }
         };
         f.write_str(mensaje)
     }

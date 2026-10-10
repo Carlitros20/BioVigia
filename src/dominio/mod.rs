@@ -2,4 +2,5 @@
 
 pub mod coordenada;
 pub mod error;
+pub mod especie;
 pub mod tramo;
