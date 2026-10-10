@@ -80,3 +80,6 @@ El estilo se comprueba con las herramientas oficiales de Rust, cuya versión que
     cargo clippy --all-targets -- -D warnings    # linter (Clippy), los avisos cuentan como errores
 
 Para corregir el formato automáticamente: `cargo fmt`. No hay dependencias externas todavía.
+
+### Modelado del dominio
+El proceso seguido para obtener el modelo del dominio del Milestone 0 (glosario, caso real anotado, eventos, clasificación, diagrama y decisiones) está en [Modelado del dominio](docs/objetivos/objetivo-2/modelado-dominio.md).
