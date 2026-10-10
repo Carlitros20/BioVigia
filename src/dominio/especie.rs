@@ -69,6 +69,9 @@ impl Especie {
         nombre_comun: String,
         invasora: bool,
     ) -> Result<Self, ErrorDominio> {
+        if nombre_comun.trim().is_empty() {
+            return Err(ErrorDominio::NombreComunRequerido);
+        }
         if nombres_anteriores.contains(&nombre_vigente) {
             return Err(ErrorDominio::NombreCientificoDuplicado);
         }

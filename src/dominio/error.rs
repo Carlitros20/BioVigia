@@ -19,6 +19,8 @@ pub enum ErrorDominio {
     NombreCientificoInvalido,
     /// Nombre científico vigente repetido en la lista de nombres anteriores.
     NombreCientificoDuplicado,
+    /// Especie con el nombre común vacío.
+    NombreComunRequerido,
     /// Avistamiento con el identificador original vacío.
     AvistamientoIncompleto,
     /// URL de foto vacía, con espacios o que no empieza por `http://` o `https://`.
@@ -38,6 +40,7 @@ impl fmt::Display for ErrorDominio {
             Self::NombreCientificoDuplicado => {
                 "el nombre científico vigente está repetido entre los anteriores"
             }
+            Self::NombreComunRequerido => "la especie necesita un nombre común",
             Self::AvistamientoIncompleto => "el avistamiento necesita su identificador original",
             Self::UrlFotoInvalida => "URL de foto inválida",
             Self::DepredacionSobreMismaEspecie => {
