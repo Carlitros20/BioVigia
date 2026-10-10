@@ -104,6 +104,12 @@ impl Longitud {
 
 /// Punto geográfico. Al recibir tipos distintos para latitud y longitud,
 /// pasarlas en el orden equivocado no compila.
+///
+/// El hemisferio va en el signo de cada valor: latitud positiva al norte y
+/// negativa al sur; longitud positiva al este y negativa al oeste. Así el
+/// hemisferio no puede contradecir al número. Si el dato llega con letra
+/// (p. ej. `55.2008721 W`), se usa `Longitud::con_hemisferio` o
+/// `Latitud::con_hemisferio`, que lo convierten al signo correspondiente.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Coordenada {
     latitud: Latitud,
