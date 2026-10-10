@@ -19,7 +19,9 @@ pub struct TramoDeRio {
 
 impl TramoDeRio {
     pub fn new(codigo: String, geometria: Box<dyn GeometriaTramo>) -> Result<Self, ErrorDominio> {
-        if codigo.trim().is_empty() {
+        // Se guarda recortado: el código es la identidad del tramo.
+        let codigo = codigo.trim().to_owned();
+        if codigo.is_empty() {
             return Err(ErrorDominio::CodigoTramoRequerido);
         }
         Ok(Self { codigo, geometria })
