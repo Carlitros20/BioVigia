@@ -47,3 +47,17 @@ La planificación relativa al objetivo 1 se encuentra respectivamente en los sig
 - [Personas](docs/objetivos/objetivo-1/personas.md)
 - [Historias de usuario](docs/objetivos/objetivo-1/historias-usuarios.md)
 - [Milestones](docs/objetivos/objetivo-1/milestones.md)
+
+### Entorno de desarrollo
+La versión de Rust del proyecto está fijada en el fichero [`rust-toolchain.toml`](rust-toolchain.toml) (Rust 1.99.0, con los componentes Clippy y rustfmt), que es la única fuente de verdad para la versión.
+
+Único paso manual: instalar [rustup](https://rustup.rs/), que trabaja en espacio de usuario (`~/.rustup` y `~/.cargo`) sin modificar el sistema (en Windows, desde WSL):
+
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+Después, desde la raíz del repositorio:
+
+    rustup toolchain install   # instala la versión fijada en rust-toolchain.toml
+    rustc --version            # comprueba que es la 1.99.0
+
+Para cambiar de versión de Rust se modifica la línea `channel` de `rust-toolchain.toml` en un commit.
