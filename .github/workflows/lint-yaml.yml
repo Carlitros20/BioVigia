@@ -11,5 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Comprueba iv.yaml y los workflows usando yq
-        run: yq eval iv.yaml .github/workflows/*.yml > /dev/null
+      - name: Comprueba todos los ficheros YAML del repositorio usando yq
+        run: git ls-files -z '*.yml' '*.yaml' | xargs -0 yq eval > /dev/null
