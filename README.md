@@ -72,3 +72,11 @@ Después, desde la raíz del repositorio:
     rustc --version            # comprueba que es la 1.99.0
 
 Para cambiar de versión de Rust se modifica la línea `channel` de `rust-toolchain.toml` en un commit.
+
+### Estilo del código
+El estilo se comprueba con las herramientas oficiales de Rust, cuya versión queda fijada por `rust-toolchain.toml`:
+
+    cargo fmt --check                            # formato (rustfmt)
+    cargo clippy --all-targets -- -D warnings    # linter (Clippy), los avisos cuentan como errores
+
+Para corregir el formato automáticamente: `cargo fmt`. El proyecto no tiene dependencias externas; su gestión corresponde al objetivo 3.
