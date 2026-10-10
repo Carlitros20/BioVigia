@@ -49,7 +49,7 @@ La planificación relativa al objetivo 1 se encuentra respectivamente en los sig
 - [Milestones](docs/objetivos/objetivo-1/milestones.md)
 
 ### Lenguaje
-El modelo del dominio se implementa en **Rust** (inicialmente se eligió Java, pero se cambió por recomendación del profesor, ya que con Java sería muy difícil avanzar en los siguientes objetivos). Motivos:
+El modelo del dominio se implementa en **Rust**. Motivos:
 
 - **Tipado estático fuerte**, comprobado en compilación.
 - **No existe `null`**: lo opcional se expresa con `Option`, así que invariantes como «depredación sin depredador» o «avistamiento sin fuente» no compilan, en lugar de comprobarse en tiempo de ejecución.
@@ -57,10 +57,10 @@ El modelo del dominio se implementa en **Rust** (inicialmente se eligió Java, p
 - **`enum` con datos** para los valores cerrados del dominio (`Fuente`, `FaseVital`, `EstadoPresencia`) y *newtypes* (`Latitud`, `Longitud`) para que intercambiar valores del mismo tipo base no compile.
 - **Herramientas oficiales integradas**: rustup para las versiones y Clippy y rustfmt para el estilo.
 
-En este objetivo se usa solo la biblioteca estándar, porque la gestión de dependencias corresponde al objetivo 3: la fecha de los avistamientos se representa con `std::time::SystemTime` y las URLs de las fotos se validan de forma mínima.
+En el Milestone 0 se usa solo la biblioteca estándar, hasta que haya gestor de dependencias: la fecha de los avistamientos se representa con `std::time::SystemTime` y las URLs de las fotos se validan de forma mínima.
 
 ### Entorno de desarrollo
-La versión de Rust del proyecto está fijada en el fichero [`rust-toolchain.toml`](rust-toolchain.toml) (Rust 1.99.0, con los componentes Clippy y rustfmt), que es la única fuente de verdad para la versión.
+La versión de Rust del proyecto está fijada en el fichero [`rust-toolchain.toml`](rust-toolchain.toml) (con los componentes Clippy y rustfmt), que es la única fuente de verdad para la versión.
 
 Único paso manual: instalar [rustup](https://rustup.rs/), que trabaja en espacio de usuario (`~/.rustup` y `~/.cargo`) sin modificar el sistema (en Windows, desde WSL):
 
@@ -69,7 +69,7 @@ La versión de Rust del proyecto está fijada en el fichero [`rust-toolchain.tom
 Después, desde la raíz del repositorio:
 
     rustup toolchain install   # instala la versión fijada en rust-toolchain.toml
-    rustc --version            # comprueba que es la 1.99.0
+    rustc --version            # comprueba que es la fijada en rust-toolchain.toml
 
 Para cambiar de versión de Rust se modifica la línea `channel` de `rust-toolchain.toml` en un commit.
 
@@ -79,4 +79,4 @@ El estilo se comprueba con las herramientas oficiales de Rust, cuya versión que
     cargo fmt --check                            # formato (rustfmt)
     cargo clippy --all-targets -- -D warnings    # linter (Clippy), los avisos cuentan como errores
 
-Para corregir el formato automáticamente: `cargo fmt`. El proyecto no tiene dependencias externas; su gestión corresponde al objetivo 3.
+Para corregir el formato automáticamente: `cargo fmt`. No hay dependencias externas todavía.
