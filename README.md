@@ -72,6 +72,3 @@ Después, desde la raíz del repositorio:
     rustc --version            # comprueba que es la fijada en rust-toolchain.toml
 
 Para cambiar de versión de Rust se modifica la línea `channel` de `rust-toolchain.toml` en un commit.
-
-### Modelado del dominio
-El proceso seguido para obtener el modelo del dominio del Milestone 0 (glosario, caso real anotado, eventos, clasificación, diagrama y decisiones) está en [Modelado del dominio](docs/objetivos/objetivo-2/modelado-dominio.md).
