@@ -1,5 +1,3 @@
-//! Avistamientos y sus fuentes (#13).
-
 use std::hash::{Hash, Hasher};
 use std::time::SystemTime;
 
@@ -7,27 +5,19 @@ use crate::dominio::coordenada::Coordenada;
 use crate::dominio::error::ErrorDominio;
 use crate::dominio::especie::EspecieId;
 
-/// Plataforma de la que procede un avistamiento.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Fuente {
     INaturalist,
     Gbif,
 }
 
-/// Grado de calidad que iNaturalist asigna a una observación (campo
-/// `quality_grade` de su API). GBIF no lo proporciona.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum GradoCalidad {
-    /// `research`: identificación confirmada por la comunidad.
     Investigacion,
-    /// `needs_id`: pendiente de confirmar la identificación.
     NecesitaIdentificacion,
-    /// `casual`: sin datos suficientes para confirmarla.
     Casual,
 }
 
-/// Fotos de un avistamiento, que permiten comprobar que la especie está bien
-/// identificada.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EvidenciaFotografica {
     autor: String,
@@ -37,8 +27,6 @@ pub struct EvidenciaFotografica {
 impl EvidenciaFotografica {
     const AUTOR_DESCONOCIDO: &'static str = "Anónimo";
 
-    /// Si no se conoce el autor, toma el valor «Anónimo». Un avistamiento sin
-    /// fotos tiene la lista de URLs vacía.
     pub fn new(autor: Option<String>, urls: Vec<String>) -> Result<Self, ErrorDominio> {
         if !urls.iter().all(|url| es_url_valida(url)) {
             return Err(ErrorDominio::UrlFotoInvalida);
@@ -58,7 +46,6 @@ impl EvidenciaFotografica {
     }
 }
 
-/// Validación mínima sin dependencias, hasta que haya gestor de dependencias.
 fn es_url_valida(url: &str) -> bool {
     let con_esquema = url
         .strip_prefix("https://")
@@ -66,8 +53,6 @@ fn es_url_valida(url: &str) -> bool {
     con_esquema.is_some_and(|resto| !resto.is_empty() && !url.contains(char::is_whitespace))
 }
 
-/// Observación de una especie en un lugar y un momento, identificada por la
-/// fuente de la que procede y su identificador original en esa fuente.
 #[derive(Debug, Clone)]
 pub struct Avistamiento {
     fuente: Fuente,
@@ -80,7 +65,6 @@ pub struct Avistamiento {
 }
 
 impl Avistamiento {
-    /// La calidad solo existe si la fuente la proporciona (iNaturalist sí, GBIF no).
     pub fn new(
         fuente: Fuente,
         id_original: String,
@@ -90,8 +74,6 @@ impl Avistamiento {
         calidad: Option<GradoCalidad>,
         evidencia: EvidenciaFotografica,
     ) -> Result<Self, ErrorDominio> {
-        // Se guarda recortado: forma parte de la identidad, y "123" y "123 "
-        // deben ser el mismo avistamiento.
         let id_original = id_original.trim().to_owned();
         if id_original.is_empty() {
             return Err(ErrorDominio::AvistamientoIncompleto);
@@ -136,8 +118,6 @@ impl Avistamiento {
     }
 }
 
-/// Dos avistamientos son el mismo si proceden de la misma fuente con el mismo
-/// identificador original.
 impl PartialEq for Avistamiento {
     fn eq(&self, otro: &Self) -> bool {
         self.fuente == otro.fuente && self.id_original == otro.id_original

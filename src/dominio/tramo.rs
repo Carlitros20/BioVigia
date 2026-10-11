@@ -1,16 +1,9 @@
-//! Tramos de río (#12).
-
 use std::fmt::Debug;
 
 use crate::dominio::error::ErrorDominio;
 
-/// Delimitación geográfica de un tramo de río.
-///
-/// No se fija todavía si será un polígono, una línea con margen u otra
-/// representación, para no acoplar el dominio a una fuente concreta.
 pub trait GeometriaTramo: Debug {}
 
-/// Tramo de río, identificado por su nombre o código.
 #[derive(Debug)]
 pub struct TramoDeRio {
     codigo: String,
@@ -19,7 +12,6 @@ pub struct TramoDeRio {
 
 impl TramoDeRio {
     pub fn new(codigo: String, geometria: Box<dyn GeometriaTramo>) -> Result<Self, ErrorDominio> {
-        // Se guarda recortado: el código es la identidad del tramo.
         let codigo = codigo.trim().to_owned();
         if codigo.is_empty() {
             return Err(ErrorDominio::CodigoTramoRequerido);
@@ -36,7 +28,6 @@ impl TramoDeRio {
     }
 }
 
-/// Dos tramos son el mismo si tienen el mismo código, aunque cambie su geometría.
 impl PartialEq for TramoDeRio {
     fn eq(&self, otro: &Self) -> bool {
         self.codigo == otro.codigo

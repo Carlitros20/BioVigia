@@ -1,12 +1,9 @@
-//! Relación de depredación entre especies (#11).
-
 use std::collections::BTreeSet;
 
 use crate::dominio::avistamiento::Fuente;
 use crate::dominio::error::ErrorDominio;
 use crate::dominio::especie::EspecieId;
 
-/// Fase vital de la presa a la que afecta una depredación.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum FaseVital {
     HuevoEmbrion,
@@ -16,7 +13,6 @@ pub enum FaseVital {
 }
 
 impl FaseVital {
-    /// "Todas" no es una fase: se representa como el conjunto de las cuatro.
     pub const TODAS: [FaseVital; 4] = [
         FaseVital::HuevoEmbrion,
         FaseVital::LarvaAlevin,
@@ -25,8 +21,6 @@ impl FaseVital {
     ];
 }
 
-/// Una especie depreda a otra en unas fases vitales concretas de la presa. No
-/// tiene identidad propia: la definen depredador, presa y fases afectadas.
 #[derive(Debug, Clone)]
 pub struct Depredacion {
     depredador: EspecieId,
@@ -36,8 +30,6 @@ pub struct Depredacion {
 }
 
 impl Depredacion {
-    /// La fuente es opcional: puede no existir en relaciones cargadas desde
-    /// catálogos internos.
     pub fn new(
         depredador: EspecieId,
         presa: EspecieId,
@@ -75,8 +67,6 @@ impl Depredacion {
     }
 }
 
-/// La fuente es solo una referencia de procedencia: no forma parte de lo que
-/// define la relación.
 impl PartialEq for Depredacion {
     fn eq(&self, otra: &Self) -> bool {
         self.depredador == otra.depredador

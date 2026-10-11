@@ -1,15 +1,11 @@
-//! Coordenadas geográficas en grados decimales (#12).
-
 use crate::dominio::error::ErrorDominio;
 
-/// Hemisferio de una latitud: solo admite norte o sur.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum HemisferioNS {
     Norte,
     Sur,
 }
 
-/// Hemisferio de una longitud: solo admite este u oeste.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum HemisferioEW {
     Este,
@@ -19,7 +15,6 @@ pub enum HemisferioEW {
 impl TryFrom<char> for HemisferioNS {
     type Error = ErrorDominio;
 
-    /// Lee la letra de hemisferio de una latitud (`N` o `S`).
     fn try_from(letra: char) -> Result<Self, Self::Error> {
         match letra.to_ascii_uppercase() {
             'N' => Ok(Self::Norte),
@@ -32,7 +27,6 @@ impl TryFrom<char> for HemisferioNS {
 impl TryFrom<char> for HemisferioEW {
     type Error = ErrorDominio;
 
-    /// Lee la letra de hemisferio de una longitud (`E` o `W`).
     fn try_from(letra: char) -> Result<Self, Self::Error> {
         match letra.to_ascii_uppercase() {
             'E' => Ok(Self::Este),
@@ -42,12 +36,10 @@ impl TryFrom<char> for HemisferioEW {
     }
 }
 
-/// Latitud en grados decimales, en [-90, 90].
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Latitud(f64);
 
 impl Latitud {
-    /// Crea una latitud con signo (positiva al norte, negativa al sur).
     pub fn new(grados: f64) -> Result<Self, ErrorDominio> {
         if (-90.0..=90.0).contains(&grados) {
             Ok(Self(grados))
@@ -56,7 +48,6 @@ impl Latitud {
         }
     }
 
-    /// Crea una latitud a partir de los grados sin signo y su hemisferio.
     pub fn con_hemisferio(grados: f64, hemisferio: HemisferioNS) -> Result<Self, ErrorDominio> {
         if !(0.0..=90.0).contains(&grados) {
             return Err(ErrorDominio::CoordenadaInvalida);
@@ -72,12 +63,10 @@ impl Latitud {
     }
 }
 
-/// Longitud en grados decimales, en [-180, 180].
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Longitud(f64);
 
 impl Longitud {
-    /// Crea una longitud con signo (positiva al este, negativa al oeste).
     pub fn new(grados: f64) -> Result<Self, ErrorDominio> {
         if (-180.0..=180.0).contains(&grados) {
             Ok(Self(grados))
@@ -86,7 +75,6 @@ impl Longitud {
         }
     }
 
-    /// Crea una longitud a partir de los grados sin signo y su hemisferio.
     pub fn con_hemisferio(grados: f64, hemisferio: HemisferioEW) -> Result<Self, ErrorDominio> {
         if !(0.0..=180.0).contains(&grados) {
             return Err(ErrorDominio::CoordenadaInvalida);
@@ -102,14 +90,6 @@ impl Longitud {
     }
 }
 
-/// Punto geográfico. Al recibir tipos distintos para latitud y longitud,
-/// pasarlas en el orden equivocado no compila.
-///
-/// El hemisferio va en el signo de cada valor: latitud positiva al norte y
-/// negativa al sur; longitud positiva al este y negativa al oeste. Así el
-/// hemisferio no puede contradecir al número. Si el dato llega con letra
-/// (p. ej. `55.2008721 W`), se usa `Longitud::con_hemisferio` o
-/// `Latitud::con_hemisferio`, que lo convierten al signo correspondiente.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Coordenada {
     latitud: Latitud,

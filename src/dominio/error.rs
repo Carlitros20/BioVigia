@@ -1,33 +1,16 @@
-//! Errores del dominio.
-
 use std::error::Error;
 use std::fmt;
 
-/// Error que se produce cuando no se cumple una regla del dominio.
-///
-/// Los constructores que pueden fallar devuelven `Result<Self, ErrorDominio>`;
-/// los errores de programación se dejan para `panic!`. Cada estructura del
-/// dominio añade aquí la variante de la invariante que comprueba.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ErrorDominio {
-    /// Latitud o longitud fuera de rango (incluidos `NaN` e infinitos), o letra
-    /// de hemisferio que no corresponde.
     CoordenadaInvalida,
-    /// Tramo de río con el nombre/código vacío.
     CodigoTramoRequerido,
-    /// Nombre científico vacío o que no sigue la nomenclatura binomial.
     NombreCientificoInvalido,
-    /// Nombre científico vigente repetido en la lista de nombres anteriores.
     NombreCientificoDuplicado,
-    /// Especie con el nombre común vacío.
     NombreComunRequerido,
-    /// Avistamiento con el identificador original vacío.
     AvistamientoIncompleto,
-    /// URL de foto vacía, con espacios o que no empieza por `http://` o `https://`.
     UrlFotoInvalida,
-    /// Depredación en la que depredador y presa son la misma especie.
     DepredacionSobreMismaEspecie,
-    /// Depredación sin ninguna fase vital afectada.
     FaseVitalRequerida,
 }
 

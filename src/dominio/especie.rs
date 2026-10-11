@@ -1,8 +1,5 @@
-//! Especies (#10).
-
 use crate::dominio::error::ErrorDominio;
 
-/// Identificador interno y estable de una especie, independiente de su nombre.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct EspecieId(u64);
 
@@ -16,16 +13,11 @@ impl EspecieId {
     }
 }
 
-/// Nombre científico de una especie en nomenclatura binomial (`Neogale vison`),
-/// con una tercera palabra opcional para la subespecie.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct NombreCientifico(String);
 
 impl NombreCientifico {
-    /// El género empieza por mayúscula y el resto de palabras van en minúscula.
     pub fn new(nombre: &str) -> Result<Self, ErrorDominio> {
-        // `split` siempre devuelve al menos un elemento (vacío si el nombre lo
-        // está), así que `palabras[0]` existe siempre.
         let palabras: Vec<&str> = nombre.split(' ').collect();
         let (genero, resto) = (palabras[0], &palabras[1..]);
         let genero_valido = genero
@@ -49,9 +41,6 @@ impl NombreCientifico {
     }
 }
 
-/// Especie, con identidad propia que se conserva aunque la taxonomía cambie su
-/// nombre científico. No guarda si es "objetivo" o "depredadora": ese papel lo
-/// da la depredación.
 #[derive(Debug, Clone)]
 pub struct Especie {
     id: EspecieId,
@@ -105,7 +94,6 @@ impl Especie {
     }
 }
 
-/// Dos especies son la misma si tienen el mismo identificador, aunque cambie su nombre.
 impl PartialEq for Especie {
     fn eq(&self, otra: &Self) -> bool {
         self.id == otra.id
