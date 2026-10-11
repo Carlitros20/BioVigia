@@ -55,12 +55,12 @@ El modelo del dominio se implementa en **Rust**. Motivos:
 - **No existe `null`**: lo opcional se expresa con `Option`, así que invariantes como «depredación sin depredador» o «avistamiento sin fuente» no compilan, en lugar de comprobarse en tiempo de ejecución.
 - **Errores del dominio con `Result`**: los constructores devuelven `Result<Self, ErrorDominio>`, separando por diseño los errores del dominio de los de programación (`panic!`).
 - **`enum` con datos** para los valores cerrados del dominio (`Fuente`, `FaseVital`, `EstadoPresencia`) y *newtypes* (`Latitud`, `Longitud`) para que intercambiar valores del mismo tipo base no compile.
-- **Herramientas oficiales integradas**: rustup para las versiones y Clippy y rustfmt para el estilo.
+- **Herramientas oficiales integradas**: rustup para gestionar las versiones.
 
 En el Milestone 0 se usa solo la biblioteca estándar, hasta que haya gestor de dependencias: la fecha de los avistamientos se representa con `std::time::SystemTime` y las URLs de las fotos se validan de forma mínima.
 
 ### Entorno de desarrollo
-La versión de Rust del proyecto está fijada en el fichero [`rust-toolchain.toml`](rust-toolchain.toml) (con los componentes Clippy y rustfmt), que es la única fuente de verdad para la versión.
+La versión de Rust del proyecto está fijada en el fichero [`rust-toolchain.toml`](rust-toolchain.toml), que es la única fuente de verdad para la versión.
 
 Único paso manual: instalar [rustup](https://rustup.rs/), que trabaja en espacio de usuario (`~/.rustup` y `~/.cargo`) sin modificar el sistema (en Windows, desde WSL):
 
@@ -72,14 +72,6 @@ Después, desde la raíz del repositorio:
     rustc --version            # comprueba que es la fijada en rust-toolchain.toml
 
 Para cambiar de versión de Rust se modifica la línea `channel` de `rust-toolchain.toml` en un commit.
-
-### Estilo del código
-El estilo se comprueba con las herramientas oficiales de Rust, cuya versión queda fijada por `rust-toolchain.toml`:
-
-    cargo fmt --check                            # formato (rustfmt)
-    cargo clippy --all-targets -- -D warnings    # linter (Clippy), los avisos cuentan como errores
-
-Para corregir el formato automáticamente: `cargo fmt`. No hay dependencias externas todavía.
 
 ### Modelado del dominio
 El proceso seguido para obtener el modelo del dominio del Milestone 0 (glosario, caso real anotado, eventos, clasificación, diagrama y decisiones) está en [Modelado del dominio](docs/objetivos/objetivo-2/modelado-dominio.md).
