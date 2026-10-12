@@ -1,4 +1,3 @@
-use std::hash::{Hash, Hasher};
 use std::time::SystemTime;
 
 use crate::dominio::coordenada::Coordenada;
@@ -44,7 +43,7 @@ fn es_url_valida(url: &str) -> bool {
     con_esquema.is_some_and(|resto| !resto.is_empty() && !url.contains(char::is_whitespace))
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Avistamiento {
     fuente: Fuente,
     id_original: String,
@@ -79,20 +78,5 @@ impl Avistamiento {
             calidad,
             evidencia,
         })
-    }
-}
-
-impl PartialEq for Avistamiento {
-    fn eq(&self, otro: &Self) -> bool {
-        self.fuente == otro.fuente && self.id_original == otro.id_original
-    }
-}
-
-impl Eq for Avistamiento {}
-
-impl Hash for Avistamiento {
-    fn hash<H: Hasher>(&self, estado: &mut H) {
-        self.fuente.hash(estado);
-        self.id_original.hash(estado);
     }
 }
