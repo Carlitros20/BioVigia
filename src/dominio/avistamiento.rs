@@ -1,7 +1,9 @@
+use std::collections::HashMap;
 use std::time::SystemTime;
 
 use crate::dominio::coordenadas::Coordenadas;
 use crate::dominio::error::ErrorDominio;
+use crate::dominio::especie::CatalogoEspecies;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Fuente {
@@ -47,7 +49,7 @@ fn es_url_valida(url: &str) -> bool {
 pub struct Avistamiento {
     fuente: Fuente,
     id_original: String,
-    nombre_especie_fuente: String,
+    nombre_cientifico_especie: String,
     fecha: SystemTime,
     coordenadas: Coordenadas,
     calidad: Option<GradoCalidad>,
@@ -56,27 +58,48 @@ pub struct Avistamiento {
 
 impl Avistamiento {
     pub fn new(
+        catalogo: &CatalogoEspecies,
         fuente: Fuente,
         id_original: String,
-        nombre_especie_fuente: String,
+        nombre_especie: &str,
         fecha: SystemTime,
         coordenadas: Coordenadas,
         calidad: Option<GradoCalidad>,
         evidencia: EvidenciaFotografica,
     ) -> Result<Self, ErrorDominio> {
         let id_original = id_original.trim().to_owned();
-        let nombre_especie_fuente = nombre_especie_fuente.trim().to_owned();
-        if id_original.is_empty() || nombre_especie_fuente.is_empty() {
+        if id_original.is_empty() {
             return Err(ErrorDominio::AvistamientoIncompleto);
         }
+        let nombre_cientifico_especie = catalogo.especie_invasora(nombre_especie)?.to_owned();
         Ok(Self {
             fuente,
             id_original,
-            nombre_especie_fuente,
+            nombre_cientifico_especie,
             fecha,
             coordenadas,
             calidad,
             evidencia,
         })
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct RegistroAvistamientos {
+    avistamientos: HashMap<(Fuente, String), Avistamiento>,
+}
+
+impl RegistroAvistamientos {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn registrar(&mut self, avistamiento: Avistamiento) -> Result<(), ErrorDominio> {
+        let clave = (avistamiento.fuente, avistamiento.id_original.clone());
+        if self.avistamientos.contains_key(&clave) {
+            return Err(ErrorDominio::AvistamientoRepetido);
+        }
+        self.avistamientos.insert(clave, avistamiento);
+        Ok(())
     }
 }
