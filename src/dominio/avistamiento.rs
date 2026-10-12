@@ -36,14 +36,6 @@ impl EvidenciaFotografica {
             .unwrap_or_else(|| Self::AUTOR_DESCONOCIDO.to_owned());
         Ok(Self { autor, urls })
     }
-
-    pub fn autor(&self) -> &str {
-        &self.autor
-    }
-
-    pub fn urls(&self) -> &[String] {
-        &self.urls
-    }
 }
 
 fn es_url_valida(url: &str) -> bool {
@@ -87,34 +79,6 @@ impl Avistamiento {
             calidad,
             evidencia,
         })
-    }
-
-    pub fn fuente(&self) -> Fuente {
-        self.fuente
-    }
-
-    pub fn id_original(&self) -> &str {
-        &self.id_original
-    }
-
-    pub fn especie(&self) -> EspecieId {
-        self.especie
-    }
-
-    pub fn fecha(&self) -> SystemTime {
-        self.fecha
-    }
-
-    pub fn coordenada(&self) -> Coordenada {
-        self.coordenada
-    }
-
-    pub fn calidad(&self) -> Option<GradoCalidad> {
-        self.calidad
-    }
-
-    pub fn evidencia(&self) -> &EvidenciaFotografica {
-        &self.evidencia
     }
 }
 

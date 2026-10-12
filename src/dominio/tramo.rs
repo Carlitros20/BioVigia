@@ -18,14 +18,6 @@ impl TramoDeRio {
         }
         Ok(Self { codigo, geometria })
     }
-
-    pub fn codigo(&self) -> &str {
-        &self.codigo
-    }
-
-    pub fn geometria(&self) -> &dyn GeometriaTramo {
-        self.geometria.as_ref()
-    }
 }
 
 impl PartialEq for TramoDeRio {

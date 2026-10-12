@@ -57,10 +57,6 @@ impl Latitud {
             HemisferioNS::Sur => Self::new(-grados),
         }
     }
-
-    pub fn grados(self) -> f64 {
-        self.0
-    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -84,10 +80,6 @@ impl Longitud {
             HemisferioEW::Oeste => Self::new(-grados),
         }
     }
-
-    pub fn grados(self) -> f64 {
-        self.0
-    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -99,13 +91,5 @@ pub struct Coordenada {
 impl Coordenada {
     pub fn new(latitud: Latitud, longitud: Longitud) -> Self {
         Self { latitud, longitud }
-    }
-
-    pub fn latitud(self) -> Latitud {
-        self.latitud
-    }
-
-    pub fn longitud(self) -> Longitud {
-        self.longitud
     }
 }

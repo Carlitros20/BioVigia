@@ -49,22 +49,6 @@ impl Depredacion {
             fuente,
         })
     }
-
-    pub fn depredador(&self) -> EspecieId {
-        self.depredador
-    }
-
-    pub fn presa(&self) -> EspecieId {
-        self.presa
-    }
-
-    pub fn fases_afectadas(&self) -> &BTreeSet<FaseVital> {
-        &self.fases_afectadas
-    }
-
-    pub fn fuente(&self) -> Option<Fuente> {
-        self.fuente
-    }
 }
 
 impl PartialEq for Depredacion {

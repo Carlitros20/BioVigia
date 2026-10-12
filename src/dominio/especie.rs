@@ -7,10 +7,6 @@ impl EspecieId {
     pub fn new(valor: u64) -> Self {
         Self(valor)
     }
-
-    pub fn valor(self) -> u64 {
-        self.0
-    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -34,10 +30,6 @@ impl NombreCientifico {
         } else {
             Err(ErrorDominio::NombreCientificoInvalido)
         }
-    }
-
-    pub fn como_str(&self) -> &str {
-        &self.0
     }
 }
 
@@ -71,26 +63,6 @@ impl Especie {
             nombre_comun,
             invasora,
         })
-    }
-
-    pub fn id(&self) -> EspecieId {
-        self.id
-    }
-
-    pub fn nombre_vigente(&self) -> &NombreCientifico {
-        &self.nombre_vigente
-    }
-
-    pub fn nombres_anteriores(&self) -> &[NombreCientifico] {
-        &self.nombres_anteriores
-    }
-
-    pub fn nombre_comun(&self) -> &str {
-        &self.nombre_comun
-    }
-
-    pub fn es_invasora(&self) -> bool {
-        self.invasora
     }
 }
 
