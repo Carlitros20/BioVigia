@@ -1,34 +1,10 @@
 use crate::dominio::error::ErrorDominio;
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct NombreCientifico(String);
-
-impl NombreCientifico {
-    pub fn new(nombre: &str) -> Result<Self, ErrorDominio> {
-        let palabras: Vec<&str> = nombre.split(' ').collect();
-        let (genero, resto) = (palabras[0], &palabras[1..]);
-        let genero_valido = genero
-            .chars()
-            .next()
-            .is_some_and(|c| c.is_ascii_uppercase())
-            && genero.chars().skip(1).all(|c| c.is_ascii_lowercase());
-        let resto_valido = (1..=2).contains(&resto.len())
-            && resto
-                .iter()
-                .all(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_lowercase() || c == '-'));
-        if genero_valido && resto_valido {
-            Ok(Self(nombre.to_owned()))
-        } else {
-            Err(ErrorDominio::NombreCientificoInvalido)
-        }
-    }
-}
-
 #[derive(Debug, Clone)]
 pub struct Especie {
     id: u64,
-    nombre_vigente: NombreCientifico,
-    nombres_anteriores: Vec<NombreCientifico>,
+    nombre_vigente: String,
+    nombres_anteriores: Vec<String>,
     nombre_comun: String,
     invasora: bool,
 }
@@ -36,11 +12,16 @@ pub struct Especie {
 impl Especie {
     pub fn new(
         id: u64,
-        nombre_vigente: NombreCientifico,
-        nombres_anteriores: Vec<NombreCientifico>,
+        nombre_vigente: String,
+        nombres_anteriores: Vec<String>,
         nombre_comun: String,
         invasora: bool,
     ) -> Result<Self, ErrorDominio> {
+        if !es_nombre_cientifico(&nombre_vigente)
+            || !nombres_anteriores.iter().all(|n| es_nombre_cientifico(n))
+        {
+            return Err(ErrorDominio::NombreCientificoInvalido);
+        }
         if nombre_comun.trim().is_empty() {
             return Err(ErrorDominio::NombreComunRequerido);
         }
@@ -55,6 +36,21 @@ impl Especie {
             invasora,
         })
     }
+}
+
+fn es_nombre_cientifico(nombre: &str) -> bool {
+    let palabras: Vec<&str> = nombre.split(' ').collect();
+    let (genero, resto) = (palabras[0], &palabras[1..]);
+    let genero_valido = genero
+        .chars()
+        .next()
+        .is_some_and(|c| c.is_ascii_uppercase())
+        && genero.chars().skip(1).all(|c| c.is_ascii_lowercase());
+    let resto_valido = (1..=2).contains(&resto.len())
+        && resto
+            .iter()
+            .all(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_lowercase() || c == '-'));
+    genero_valido && resto_valido
 }
 
 impl PartialEq for Especie {
