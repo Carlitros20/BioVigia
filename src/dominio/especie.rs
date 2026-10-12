@@ -3,7 +3,6 @@ use crate::dominio::error::ErrorDominio;
 
 #[derive(Debug, Clone)]
 pub struct Especie {
-    id: u64,
     nombre_vigente: String,
     nombres_anteriores: Vec<String>,
     nombre_comun: String,
@@ -13,7 +12,6 @@ pub struct Especie {
 
 impl Especie {
     pub fn new(
-        id: u64,
         nombre_vigente: String,
         nombres_anteriores: Vec<String>,
         nombre_comun: String,
@@ -38,7 +36,6 @@ impl Especie {
             return Err(ErrorDominio::DepredacionSobreMismaEspecie);
         }
         Ok(Self {
-            id,
             nombre_vigente,
             nombres_anteriores,
             nombre_comun,
@@ -65,7 +62,7 @@ pub(super) fn es_nombre_cientifico(nombre: &str) -> bool {
 
 impl PartialEq for Especie {
     fn eq(&self, otra: &Self) -> bool {
-        self.id == otra.id
+        self.nombre_vigente == otra.nombre_vigente
     }
 }
 
