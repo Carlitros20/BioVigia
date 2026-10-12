@@ -1,51 +1,63 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use crate::dominio::error::ErrorDominio;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Especie {
     nombre_comun: String,
-    nombres: HashSet<String>,
     invasora: bool,
 }
 
-impl Especie {
-    pub fn new(
-        nombre_comun: String,
-        nombres: HashSet<String>,
-        invasora: bool,
-    ) -> Result<Self, ErrorDominio> {
-        let nombre_comun = nombre_comun.trim().to_owned();
-        if nombre_comun.is_empty() {
-            return Err(ErrorDominio::NombreComunRequerido);
-        }
-        let nombres: HashSet<String> = nombres.iter().map(|n| n.trim().to_owned()).collect();
-        if nombres.is_empty() || nombres.contains("") {
-            return Err(ErrorDominio::NombreEspecieRequerido);
-        }
-        Ok(Self {
-            nombre_comun,
-            nombres,
-            invasora,
-        })
-    }
-}
-
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct CatalogoEspecies {
-    especies: Vec<Especie>,
+    especies: HashMap<String, Especie>,
+    nombres_anteriores: HashMap<String, String>,
 }
 
 impl CatalogoEspecies {
-    pub fn new(especies: Vec<Especie>) -> Result<Self, ErrorDominio> {
-        for (i, especie) in especies.iter().enumerate() {
-            if especies[..i]
-                .iter()
-                .any(|otra| !otra.nombres.is_disjoint(&especie.nombres))
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn registrar(
+        &mut self,
+        nombre_cientifico: String,
+        nombre_comun: String,
+        invasora: bool,
+        nombres_anteriores: Vec<String>,
+    ) -> Result<(), ErrorDominio> {
+        let nombre_cientifico = nombre_cientifico.trim().to_owned();
+        let nombre_comun = nombre_comun.trim().to_owned();
+        let nombres_anteriores: Vec<String> = nombres_anteriores
+            .iter()
+            .map(|n| n.trim().to_owned())
+            .collect();
+        if nombre_cientifico.is_empty() || nombres_anteriores.iter().any(|n| n.is_empty()) {
+            return Err(ErrorDominio::NombreCientificoRequerido);
+        }
+        if nombre_comun.is_empty() {
+            return Err(ErrorDominio::NombreComunRequerido);
+        }
+        let mut nuevos = HashSet::new();
+        for nombre in std::iter::once(&nombre_cientifico).chain(&nombres_anteriores) {
+            if !nuevos.insert(nombre)
+                || self.especies.contains_key(nombre)
+                || self.nombres_anteriores.contains_key(nombre)
             {
                 return Err(ErrorDominio::NombreEspecieRepetido);
             }
         }
-        Ok(Self { especies })
+        for anterior in nombres_anteriores {
+            self.nombres_anteriores
+                .insert(anterior, nombre_cientifico.clone());
+        }
+        self.especies.insert(
+            nombre_cientifico,
+            Especie {
+                nombre_comun,
+                invasora,
+            },
+        );
+        Ok(())
     }
 }
