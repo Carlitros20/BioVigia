@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use crate::dominio::error::ErrorDominio;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Especie {
+struct Especie {
     nombre_comun: String,
     invasora: bool,
 }
