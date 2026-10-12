@@ -2,6 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::dominio::avistamiento::Fuente;
 use crate::dominio::error::ErrorDominio;
+use crate::dominio::especie::es_nombre_cientifico;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum FaseVital {
@@ -21,41 +22,36 @@ impl FaseVital {
 }
 
 #[derive(Debug, Clone)]
-pub struct Depredacion {
-    depredador: u64,
-    presa: u64,
+pub struct Depredador {
+    pub(super) especie: String,
     fases_afectadas: BTreeSet<FaseVital>,
     fuente: Option<Fuente>,
 }
 
-impl Depredacion {
+impl Depredador {
     pub fn new(
-        depredador: u64,
-        presa: u64,
+        especie: String,
         fases_afectadas: BTreeSet<FaseVital>,
         fuente: Option<Fuente>,
     ) -> Result<Self, ErrorDominio> {
-        if depredador == presa {
-            return Err(ErrorDominio::DepredacionSobreMismaEspecie);
+        if !es_nombre_cientifico(&especie) {
+            return Err(ErrorDominio::NombreCientificoInvalido);
         }
         if fases_afectadas.is_empty() {
             return Err(ErrorDominio::FaseVitalRequerida);
         }
         Ok(Self {
-            depredador,
-            presa,
+            especie,
             fases_afectadas,
             fuente,
         })
     }
 }
 
-impl PartialEq for Depredacion {
-    fn eq(&self, otra: &Self) -> bool {
-        self.depredador == otra.depredador
-            && self.presa == otra.presa
-            && self.fases_afectadas == otra.fases_afectadas
+impl PartialEq for Depredador {
+    fn eq(&self, otro: &Self) -> bool {
+        self.especie == otro.especie && self.fases_afectadas == otro.fases_afectadas
     }
 }
 
-impl Eq for Depredacion {}
+impl Eq for Depredador {}

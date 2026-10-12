@@ -1,3 +1,4 @@
+use crate::dominio::depredacion::Depredador;
 use crate::dominio::error::ErrorDominio;
 
 #[derive(Debug, Clone)]
@@ -7,6 +8,7 @@ pub struct Especie {
     nombres_anteriores: Vec<String>,
     nombre_comun: String,
     invasora: bool,
+    depredadores: Vec<Depredador>,
 }
 
 impl Especie {
@@ -16,6 +18,7 @@ impl Especie {
         nombres_anteriores: Vec<String>,
         nombre_comun: String,
         invasora: bool,
+        depredadores: Vec<Depredador>,
     ) -> Result<Self, ErrorDominio> {
         if !es_nombre_cientifico(&nombre_vigente)
             || !nombres_anteriores.iter().all(|n| es_nombre_cientifico(n))
@@ -28,17 +31,24 @@ impl Especie {
         if nombres_anteriores.contains(&nombre_vigente) {
             return Err(ErrorDominio::NombreCientificoDuplicado);
         }
+        if depredadores
+            .iter()
+            .any(|d| d.especie == nombre_vigente || nombres_anteriores.contains(&d.especie))
+        {
+            return Err(ErrorDominio::DepredacionSobreMismaEspecie);
+        }
         Ok(Self {
             id,
             nombre_vigente,
             nombres_anteriores,
             nombre_comun,
             invasora,
+            depredadores,
         })
     }
 }
 
-fn es_nombre_cientifico(nombre: &str) -> bool {
+pub(super) fn es_nombre_cientifico(nombre: &str) -> bool {
     let palabras: Vec<&str> = nombre.split(' ').collect();
     let (genero, resto) = (palabras[0], &palabras[1..]);
     let genero_valido = genero
