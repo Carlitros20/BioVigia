@@ -48,7 +48,7 @@ impl Latitud {
         }
     }
 
-    pub fn con_hemisferio(grados: f64, hemisferio: HemisferioNS) -> Result<Self, ErrorDominio> {
+    fn con_hemisferio(grados: f64, hemisferio: HemisferioNS) -> Result<Self, ErrorDominio> {
         if !(0.0..=90.0).contains(&grados) {
             return Err(ErrorDominio::CoordenadaInvalida);
         }
@@ -71,7 +71,7 @@ impl Longitud {
         }
     }
 
-    pub fn con_hemisferio(grados: f64, hemisferio: HemisferioEW) -> Result<Self, ErrorDominio> {
+    fn con_hemisferio(grados: f64, hemisferio: HemisferioEW) -> Result<Self, ErrorDominio> {
         if !(0.0..=180.0).contains(&grados) {
             return Err(ErrorDominio::CoordenadaInvalida);
         }
@@ -91,5 +91,17 @@ pub struct Coordenada {
 impl Coordenada {
     pub fn new(latitud: Latitud, longitud: Longitud) -> Self {
         Self { latitud, longitud }
+    }
+
+    pub fn con_hemisferio(
+        grados_latitud: f64,
+        hemisferio_ns: HemisferioNS,
+        grados_longitud: f64,
+        hemisferio_ew: HemisferioEW,
+    ) -> Result<Self, ErrorDominio> {
+        Ok(Self::new(
+            Latitud::con_hemisferio(grados_latitud, hemisferio_ns)?,
+            Longitud::con_hemisferio(grados_longitud, hemisferio_ew)?,
+        ))
     }
 }
