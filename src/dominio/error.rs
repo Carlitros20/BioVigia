@@ -5,6 +5,7 @@ use std::fmt;
 pub enum ErrorDominio {
     CoordenadasInvalidas,
     CodigoTramoRequerido,
+    NombreComunRequerido,
     NombreEspecieRequerido,
     NombreEspecieRepetido,
     AvistamientoIncompleto,
@@ -19,6 +20,7 @@ impl fmt::Display for ErrorDominio {
         let mensaje = match self {
             Self::CoordenadasInvalidas => "coordenadas inválidas",
             Self::CodigoTramoRequerido => "el tramo de río necesita un nombre o código",
+            Self::NombreComunRequerido => "la especie necesita un nombre común",
             Self::NombreEspecieRequerido => "la especie necesita al menos un nombre no vacío",
             Self::NombreEspecieRepetido => "el mismo nombre está en dos especies del catálogo",
             Self::AvistamientoIncompleto => "el avistamiento necesita su identificador original y el nombre de la especie",

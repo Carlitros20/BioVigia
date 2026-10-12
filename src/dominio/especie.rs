@@ -4,17 +4,30 @@ use crate::dominio::error::ErrorDominio;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Especie {
+    nombre_comun: String,
     nombres: BTreeSet<String>,
     invasora: bool,
 }
 
 impl Especie {
-    pub fn new(nombres: BTreeSet<String>, invasora: bool) -> Result<Self, ErrorDominio> {
+    pub fn new(
+        nombre_comun: String,
+        nombres: BTreeSet<String>,
+        invasora: bool,
+    ) -> Result<Self, ErrorDominio> {
+        let nombre_comun = nombre_comun.trim().to_owned();
+        if nombre_comun.is_empty() {
+            return Err(ErrorDominio::NombreComunRequerido);
+        }
         let nombres: BTreeSet<String> = nombres.iter().map(|n| n.trim().to_owned()).collect();
         if nombres.is_empty() || nombres.contains("") {
             return Err(ErrorDominio::NombreEspecieRequerido);
         }
-        Ok(Self { nombres, invasora })
+        Ok(Self {
+            nombre_comun,
+            nombres,
+            invasora,
+        })
     }
 }
 
