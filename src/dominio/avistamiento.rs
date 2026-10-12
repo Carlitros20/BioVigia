@@ -48,7 +48,7 @@ fn es_url_valida(url: &str) -> bool {
 pub struct Avistamiento {
     fuente: Fuente,
     id_original: String,
-    especie: u64,
+    nombre_especie_fuente: String,
     fecha: SystemTime,
     coordenada: Coordenada,
     calidad: Option<GradoCalidad>,
@@ -59,20 +59,21 @@ impl Avistamiento {
     pub fn new(
         fuente: Fuente,
         id_original: String,
-        especie: u64,
+        nombre_especie_fuente: String,
         fecha: SystemTime,
         coordenada: Coordenada,
         calidad: Option<GradoCalidad>,
         evidencia: EvidenciaFotografica,
     ) -> Result<Self, ErrorDominio> {
         let id_original = id_original.trim().to_owned();
-        if id_original.is_empty() {
+        let nombre_especie_fuente = nombre_especie_fuente.trim().to_owned();
+        if id_original.is_empty() || nombre_especie_fuente.is_empty() {
             return Err(ErrorDominio::AvistamientoIncompleto);
         }
         Ok(Self {
             fuente,
             id_original,
-            especie,
+            nombre_especie_fuente,
             fecha,
             coordenada,
             calidad,
