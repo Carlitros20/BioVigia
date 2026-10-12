@@ -3,7 +3,7 @@ use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ErrorDominio {
-    CoordenadaInvalida,
+    CoordenadasInvalidas,
     CodigoTramoRequerido,
     NombreEspecieRequerido,
     NombreEspecieRepetido,
@@ -17,7 +17,7 @@ pub enum ErrorDominio {
 impl fmt::Display for ErrorDominio {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mensaje = match self {
-            Self::CoordenadaInvalida => "coordenada inválida",
+            Self::CoordenadasInvalidas => "coordenadas inválidas",
             Self::CodigoTramoRequerido => "el tramo de río necesita un nombre o código",
             Self::NombreEspecieRequerido => "la especie necesita al menos un nombre no vacío",
             Self::NombreEspecieRepetido => "el mismo nombre está en dos especies del catálogo",

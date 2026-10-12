@@ -1,6 +1,6 @@
 use std::time::SystemTime;
 
-use crate::dominio::coordenada::Coordenada;
+use crate::dominio::coordenadas::Coordenadas;
 use crate::dominio::error::ErrorDominio;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -49,7 +49,7 @@ pub struct Avistamiento {
     id_original: String,
     nombre_especie_fuente: String,
     fecha: SystemTime,
-    coordenada: Coordenada,
+    coordenadas: Coordenadas,
     calidad: Option<GradoCalidad>,
     evidencia: EvidenciaFotografica,
 }
@@ -60,7 +60,7 @@ impl Avistamiento {
         id_original: String,
         nombre_especie_fuente: String,
         fecha: SystemTime,
-        coordenada: Coordenada,
+        coordenadas: Coordenadas,
         calidad: Option<GradoCalidad>,
         evidencia: EvidenciaFotografica,
     ) -> Result<Self, ErrorDominio> {
@@ -74,7 +74,7 @@ impl Avistamiento {
             id_original,
             nombre_especie_fuente,
             fecha,
-            coordenada,
+            coordenadas,
             calidad,
             evidencia,
         })

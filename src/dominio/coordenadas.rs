@@ -19,7 +19,7 @@ impl TryFrom<char> for HemisferioNS {
         match letra.to_ascii_uppercase() {
             'N' => Ok(Self::Norte),
             'S' => Ok(Self::Sur),
-            _ => Err(ErrorDominio::CoordenadaInvalida),
+            _ => Err(ErrorDominio::CoordenadasInvalidas),
         }
     }
 }
@@ -31,7 +31,7 @@ impl TryFrom<char> for HemisferioEW {
         match letra.to_ascii_uppercase() {
             'E' => Ok(Self::Este),
             'W' => Ok(Self::Oeste),
-            _ => Err(ErrorDominio::CoordenadaInvalida),
+            _ => Err(ErrorDominio::CoordenadasInvalidas),
         }
     }
 }
@@ -44,13 +44,13 @@ impl Latitud {
         if (-90.0..=90.0).contains(&grados) {
             Ok(Self(grados))
         } else {
-            Err(ErrorDominio::CoordenadaInvalida)
+            Err(ErrorDominio::CoordenadasInvalidas)
         }
     }
 
     fn con_hemisferio(grados: f64, hemisferio: HemisferioNS) -> Result<Self, ErrorDominio> {
         if !(0.0..=90.0).contains(&grados) {
-            return Err(ErrorDominio::CoordenadaInvalida);
+            return Err(ErrorDominio::CoordenadasInvalidas);
         }
         match hemisferio {
             HemisferioNS::Norte => Self::new(grados),
@@ -67,13 +67,13 @@ impl Longitud {
         if (-180.0..=180.0).contains(&grados) {
             Ok(Self(grados))
         } else {
-            Err(ErrorDominio::CoordenadaInvalida)
+            Err(ErrorDominio::CoordenadasInvalidas)
         }
     }
 
     fn con_hemisferio(grados: f64, hemisferio: HemisferioEW) -> Result<Self, ErrorDominio> {
         if !(0.0..=180.0).contains(&grados) {
-            return Err(ErrorDominio::CoordenadaInvalida);
+            return Err(ErrorDominio::CoordenadasInvalidas);
         }
         match hemisferio {
             HemisferioEW::Este => Self::new(grados),
@@ -83,12 +83,12 @@ impl Longitud {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Coordenada {
+pub struct Coordenadas {
     latitud: Latitud,
     longitud: Longitud,
 }
 
-impl Coordenada {
+impl Coordenadas {
     pub fn new(latitud: Latitud, longitud: Longitud) -> Self {
         Self { latitud, longitud }
     }
