@@ -12,6 +12,7 @@ pub enum ErrorDominio {
     UrlFotoInvalida,
     DepredacionSobreMismaEspecie,
     FaseVitalRequerida,
+    DepredacionRepetida,
 }
 
 impl fmt::Display for ErrorDominio {
@@ -26,6 +27,7 @@ impl fmt::Display for ErrorDominio {
             Self::UrlFotoInvalida => "URL de foto inválida",
             Self::DepredacionSobreMismaEspecie => "el depredador y la presa no pueden ser la misma especie",
             Self::FaseVitalRequerida => "la depredación debe afectar al menos a una fase vital",
+            Self::DepredacionRepetida => "la misma depredación entre dos especies está repetida",
         };
         f.write_str(mensaje)
     }

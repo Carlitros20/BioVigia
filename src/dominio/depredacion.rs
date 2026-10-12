@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::dominio::avistamiento::Fuente;
 use crate::dominio::error::ErrorDominio;
-use crate::dominio::especie::es_nombre_cientifico;
+use crate::dominio::especie::Especie;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum FaseVital {
@@ -22,36 +22,59 @@ impl FaseVital {
 }
 
 #[derive(Debug, Clone)]
-pub struct Depredador {
-    pub(super) especie: String,
+pub struct Depredacion {
+    depredador: Especie,
+    presa: Especie,
     fases_afectadas: BTreeSet<FaseVital>,
     fuente: Option<Fuente>,
 }
 
-impl Depredador {
+impl Depredacion {
     pub fn new(
-        especie: String,
+        depredador: Especie,
+        presa: Especie,
         fases_afectadas: BTreeSet<FaseVital>,
         fuente: Option<Fuente>,
     ) -> Result<Self, ErrorDominio> {
-        if !es_nombre_cientifico(&especie) {
-            return Err(ErrorDominio::NombreCientificoInvalido);
+        if depredador == presa {
+            return Err(ErrorDominio::DepredacionSobreMismaEspecie);
         }
         if fases_afectadas.is_empty() {
             return Err(ErrorDominio::FaseVitalRequerida);
         }
         Ok(Self {
-            especie,
+            depredador,
+            presa,
             fases_afectadas,
             fuente,
         })
     }
 }
 
-impl PartialEq for Depredador {
-    fn eq(&self, otro: &Self) -> bool {
-        self.especie == otro.especie && self.fases_afectadas == otro.fases_afectadas
+impl PartialEq for Depredacion {
+    fn eq(&self, otra: &Self) -> bool {
+        self.depredador == otra.depredador
+            && self.presa == otra.presa
+            && self.fases_afectadas == otra.fases_afectadas
     }
 }
 
-impl Eq for Depredador {}
+impl Eq for Depredacion {}
+
+#[derive(Debug, Clone)]
+pub struct RedDepredacion {
+    depredaciones: Vec<Depredacion>,
+}
+
+impl RedDepredacion {
+    pub fn new(depredaciones: Vec<Depredacion>) -> Result<Self, ErrorDominio> {
+        for (i, depredacion) in depredaciones.iter().enumerate() {
+            if depredaciones[..i].iter().any(|otra| {
+                otra.depredador == depredacion.depredador && otra.presa == depredacion.presa
+            }) {
+                return Err(ErrorDominio::DepredacionRepetida);
+            }
+        }
+        Ok(Self { depredaciones })
+    }
+}
