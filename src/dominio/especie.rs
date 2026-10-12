@@ -1,14 +1,5 @@
 use crate::dominio::error::ErrorDominio;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct EspecieId(u64);
-
-impl EspecieId {
-    pub fn new(valor: u64) -> Self {
-        Self(valor)
-    }
-}
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct NombreCientifico(String);
 
@@ -35,7 +26,7 @@ impl NombreCientifico {
 
 #[derive(Debug, Clone)]
 pub struct Especie {
-    id: EspecieId,
+    id: u64,
     nombre_vigente: NombreCientifico,
     nombres_anteriores: Vec<NombreCientifico>,
     nombre_comun: String,
@@ -44,7 +35,7 @@ pub struct Especie {
 
 impl Especie {
     pub fn new(
-        id: EspecieId,
+        id: u64,
         nombre_vigente: NombreCientifico,
         nombres_anteriores: Vec<NombreCientifico>,
         nombre_comun: String,

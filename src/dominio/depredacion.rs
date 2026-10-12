@@ -2,7 +2,6 @@ use std::collections::BTreeSet;
 
 use crate::dominio::avistamiento::Fuente;
 use crate::dominio::error::ErrorDominio;
-use crate::dominio::especie::EspecieId;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum FaseVital {
@@ -23,16 +22,16 @@ impl FaseVital {
 
 #[derive(Debug, Clone)]
 pub struct Depredacion {
-    depredador: EspecieId,
-    presa: EspecieId,
+    depredador: u64,
+    presa: u64,
     fases_afectadas: BTreeSet<FaseVital>,
     fuente: Option<Fuente>,
 }
 
 impl Depredacion {
     pub fn new(
-        depredador: EspecieId,
-        presa: EspecieId,
+        depredador: u64,
+        presa: u64,
         fases_afectadas: BTreeSet<FaseVital>,
         fuente: Option<Fuente>,
     ) -> Result<Self, ErrorDominio> {

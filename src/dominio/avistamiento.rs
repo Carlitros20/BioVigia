@@ -3,7 +3,6 @@ use std::time::SystemTime;
 
 use crate::dominio::coordenada::Coordenada;
 use crate::dominio::error::ErrorDominio;
-use crate::dominio::especie::EspecieId;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Fuente {
@@ -49,7 +48,7 @@ fn es_url_valida(url: &str) -> bool {
 pub struct Avistamiento {
     fuente: Fuente,
     id_original: String,
-    especie: EspecieId,
+    especie: u64,
     fecha: SystemTime,
     coordenada: Coordenada,
     calidad: Option<GradoCalidad>,
@@ -60,7 +59,7 @@ impl Avistamiento {
     pub fn new(
         fuente: Fuente,
         id_original: String,
-        especie: EspecieId,
+        especie: u64,
         fecha: SystemTime,
         coordenada: Coordenada,
         calidad: Option<GradoCalidad>,
