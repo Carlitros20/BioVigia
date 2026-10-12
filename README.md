@@ -54,7 +54,7 @@ El modelo del dominio se implementa en **Rust**. Motivos:
 - **Tipado estático fuerte**, comprobado en compilación.
 - **No existe `null`**: lo opcional se expresa con `Option`, así que invariantes como «depredación sin depredador» o «avistamiento sin fuente» no compilan, en lugar de comprobarse en tiempo de ejecución.
 - **Errores del dominio con `Result`**: los constructores devuelven `Result<Self, ErrorDominio>`, separando por diseño los errores del dominio de los de programación (`panic!`).
-- **`enum` con datos** para los valores cerrados del dominio (`Fuente`, `FaseVital`, `EstadoPresencia`) y *newtypes* (`Latitud`, `Longitud`) para que intercambiar valores del mismo tipo base no compile.
+- **`enum` con datos** para los valores cerrados del dominio (`Fuente`, `FaseVital`) y *newtypes* (`Latitud`, `Longitud`) para que intercambiar valores del mismo tipo base no compile.
 - **Herramientas oficiales integradas**: rustup para gestionar las versiones.
 
 En el Milestone 0 se usa solo la biblioteca estándar, hasta que haya gestor de dependencias: la fecha de los avistamientos se representa con `std::time::SystemTime` y las URLs de las fotos se validan de forma mínima.
