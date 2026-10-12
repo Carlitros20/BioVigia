@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::dominio::avistamiento::Fuente;
 use crate::dominio::error::ErrorDominio;
-use crate::dominio::especie::Especie;
+use crate::dominio::especie::CatalogoEspecies;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum FaseVital {
@@ -23,28 +23,31 @@ impl FaseVital {
 
 #[derive(Debug, Clone)]
 pub struct Depredacion {
-    depredador: Especie,
-    presa: Especie,
+    nombre_cientifico_depredador: String,
+    nombre_cientifico_presa: String,
     fases_afectadas: BTreeSet<FaseVital>,
     fuente: Option<Fuente>,
 }
 
 impl Depredacion {
     pub fn new(
-        depredador: Especie,
-        presa: Especie,
+        catalogo: &CatalogoEspecies,
+        depredador: &str,
+        presa: &str,
         fases_afectadas: BTreeSet<FaseVital>,
         fuente: Option<Fuente>,
     ) -> Result<Self, ErrorDominio> {
-        if depredador == presa {
+        let nombre_cientifico_depredador = catalogo.especie_invasora(depredador)?.to_owned();
+        let nombre_cientifico_presa = catalogo.especie(presa)?.to_owned();
+        if nombre_cientifico_depredador == nombre_cientifico_presa {
             return Err(ErrorDominio::DepredacionSobreMismaEspecie);
         }
         if fases_afectadas.is_empty() {
             return Err(ErrorDominio::FaseVitalRequerida);
         }
         Ok(Self {
-            depredador,
-            presa,
+            nombre_cientifico_depredador,
+            nombre_cientifico_presa,
             fases_afectadas,
             fuente,
         })
@@ -53,28 +56,32 @@ impl Depredacion {
 
 impl PartialEq for Depredacion {
     fn eq(&self, otra: &Self) -> bool {
-        self.depredador == otra.depredador
-            && self.presa == otra.presa
+        self.nombre_cientifico_depredador == otra.nombre_cientifico_depredador
+            && self.nombre_cientifico_presa == otra.nombre_cientifico_presa
             && self.fases_afectadas == otra.fases_afectadas
     }
 }
 
 impl Eq for Depredacion {}
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct RedDepredacion {
     depredaciones: Vec<Depredacion>,
 }
 
 impl RedDepredacion {
-    pub fn new(depredaciones: Vec<Depredacion>) -> Result<Self, ErrorDominio> {
-        for (i, depredacion) in depredaciones.iter().enumerate() {
-            if depredaciones[..i].iter().any(|otra| {
-                otra.depredador == depredacion.depredador && otra.presa == depredacion.presa
-            }) {
-                return Err(ErrorDominio::DepredacionRepetida);
-            }
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn registrar(&mut self, depredacion: Depredacion) -> Result<(), ErrorDominio> {
+        if self.depredaciones.iter().any(|otra| {
+            otra.nombre_cientifico_depredador == depredacion.nombre_cientifico_depredador
+                && otra.nombre_cientifico_presa == depredacion.nombre_cientifico_presa
+        }) {
+            return Err(ErrorDominio::DepredacionRepetida);
         }
-        Ok(Self { depredaciones })
+        self.depredaciones.push(depredacion);
+        Ok(())
     }
 }

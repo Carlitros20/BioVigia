@@ -60,4 +60,25 @@ impl CatalogoEspecies {
         );
         Ok(())
     }
+
+    pub(crate) fn especie(&self, nombre: &str) -> Result<&str, ErrorDominio> {
+        let nombre = nombre.trim();
+        match self.especies.get_key_value(nombre) {
+            Some((nombre_cientifico, _)) => Ok(nombre_cientifico),
+            None => self
+                .nombres_anteriores
+                .get(nombre)
+                .map(String::as_str)
+                .ok_or(ErrorDominio::EspecieDesconocida),
+        }
+    }
+
+    pub(crate) fn especie_invasora(&self, nombre: &str) -> Result<&str, ErrorDominio> {
+        let nombre_cientifico = self.especie(nombre)?;
+        if self.especies[nombre_cientifico].invasora {
+            Ok(nombre_cientifico)
+        } else {
+            Err(ErrorDominio::EspecieNoInvasora)
+        }
+    }
 }
